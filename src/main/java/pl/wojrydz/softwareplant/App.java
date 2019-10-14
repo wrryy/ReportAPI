@@ -1,4 +1,4 @@
-package pl.wojrydz;
+package pl.wojrydz.softwareplant;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
