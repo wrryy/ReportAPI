@@ -13,7 +13,7 @@ public class PeopleSerializer extends JsonSerializer<People> {
     @Override
     public void serialize(People value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
-//        gen.writeObjectFieldStart("character");
+//        gen.writeObjectFieldStart("character"); //TODO
         gen.writeStringField("character_id", value.getPeople_id());
         gen.writeStringField("character_name", value.getName());
         gen.writeEndObject();

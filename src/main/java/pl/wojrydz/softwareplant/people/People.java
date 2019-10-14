@@ -13,18 +13,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "people")
 @JsonSerialize(using = PeopleSerializer.class)
 public class People implements SingleResource {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private long id;
     private String people_id;
     private String name;
+    @Transient
     private List<String> films;
+    @Transient
     private String url;
 
     public String getName() {

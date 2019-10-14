@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class FilmService {
 
     public Map<People, List<Film>> getFilmsPerPeople(List<People> people) {
-        Map<People,List<Film>> filmResult = new HashMap<>();
+        Map<People, List<Film>> filmResult = new HashMap<>();
 
         for (People each : people) {
             filmResult.put(each, getFilmsPerPeople(each));
@@ -21,11 +21,11 @@ public class FilmService {
         return filmResult;
     }
 
-    private List<Film> getFilmsPerPeople(People people){
+    private List<Film> getFilmsPerPeople(People people) {
         return people.getFilms().stream().map(this::getFilmResource).collect(Collectors.toList());
     }
 
-    private Film getFilmResource(String filmUrl){
+    private Film getFilmResource(String filmUrl) {
         Film film = new Film();
         film.setUrl(filmUrl);
         film.setId("1");

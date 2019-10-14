@@ -9,7 +9,7 @@ public class Utils {
 
     private static RestTemplate restTemplate = new RestTemplate();
 
-    public static <T> T callForPage(String swapiUrl, Class<T> clazz){
+    public static <T> T callForPage(String swapiUrl, Class<T> clazz) {
         ResponseEntity<T> responseEntity = restTemplate.getForEntity(swapiUrl, clazz);
         return responseEntity.getBody();
     }

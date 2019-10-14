@@ -11,17 +11,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "character_films")
-@JsonPropertyOrder({ "character", "films"})
+@JsonPropertyOrder({"character", "films"})
 public class PeopleFilm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private long id;
+    @ManyToOne
+    @JoinColumn(name = "id")
     private People character;
     private List<Film> films;
 

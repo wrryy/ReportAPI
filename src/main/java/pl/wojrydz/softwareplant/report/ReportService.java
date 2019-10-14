@@ -34,13 +34,33 @@ class ReportService {
         this.reportRepository = reportRepository;
     }
 
+    ResponseEntity<List<Report>> getAll() {
+        return findAll();
+    }
+
+    ResponseEntity<Report> getOne(long report_id) {
+        return getOneFromDatabase(report_id);
+    }
+
     ResponseEntity putReport(long report_id, PutRequest putRequest) {
         Planet planet = planetService.getPlanet(putRequest.getQuery_criteria_planet_name());
         List<People> people = peopleService.getPeople(putRequest.getQuery_criteria_character_phrase());
         Map<People, List<Film>> filmsPerPeople = filmService.getFilmsPerPeople(people);
         Report report = createReport(planet, filmsPerPeople, putRequest, report_id);
         reportRepository.save(report);
-        return ResponseEntity.ok(report);
+        return ResponseEntity.status(201).body(report);
+    }
+
+    private ResponseEntity<List<Report>> findAll() {
+        return ResponseEntity.ok(reportRepository.findAll());
+    }
+
+    private ResponseEntity<Report> getOneFromDatabase(long report_id) {
+        Optional<Report> databaseRecord = reportRepository.findById(report_id);
+        if (databaseRecord.isPresent()) {
+            return ResponseEntity.ok(databaseRecord.get());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     private Report createReport(Planet planet, Map<People, List<Film>> filmsPerPeople, PutRequest putRequest, long report_id) {
@@ -55,17 +75,18 @@ class ReportService {
     private void setReportId(Report report, long report_id) {
         report.setReport_id(report_id);
     }
-    private void setReportPlanet(Report report, Planet planet){
+
+    private void setReportPlanet(Report report, Planet planet) {
         report.setPlanet_id(planet.getId());
         report.setPlanet_name(planet.getName());
     }
 
-    private void setReportQueryParams(Report report, PutRequest putRequest){
+    private void setReportQueryParams(Report report, PutRequest putRequest) {
         report.setQuery_criteria_character_phrase(putRequest.getQuery_criteria_character_phrase());
         report.setQuery_criteria_planet_name(putRequest.getQuery_criteria_planet_name());
     }
 
-    private void setReportPeopleFilm(Report report, Map<People, List<Film>> filmsPerPeople ){
+    private void setReportPeopleFilm(Report report, Map<People, List<Film>> filmsPerPeople) {
         List<PeopleFilm> peopleFilms = report.getCharacterFilms();
         for (Map.Entry<People, List<Film>> each : filmsPerPeople.entrySet()) {
             PeopleFilm peopleFilm = createPeopleFilm(each);
@@ -73,10 +94,20 @@ class ReportService {
         }
     }
 
-    private PeopleFilm createPeopleFilm(Map.Entry<People, List<Film>> entry){
+    private PeopleFilm createPeopleFilm(Map.Entry<People, List<Film>> entry) {
         PeopleFilm peopleFilm = new PeopleFilm();
         peopleFilm.setCharacter(entry.getKey());
         peopleFilm.setFilms(entry.getValue());
         return peopleFilm;
+    }
+
+    ResponseEntity deleteAll() {
+        reportRepository.deleteAll();
+        return ResponseEntity.ok().build();
+    }
+
+    ResponseEntity deleteOne(long report_id) {
+        reportRepository.deleteById(report_id);
+        return ResponseEntity.ok().build();
     }
 }

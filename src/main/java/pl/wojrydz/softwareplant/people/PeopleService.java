@@ -21,7 +21,7 @@ public class PeopleService {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    
+
     public List<People> getPeople(String query_criteria_planet_name) {
         List<People> peopleResult = new ArrayList<>();
         PeoplePage currentPeoplePage = mockPeople(MOCK_PEOPLE1, null); //TODO wywalic
@@ -53,9 +53,9 @@ public class PeopleService {
     private void changeCurrentPage(PeoplePage currentPeoplePage) {
         currentPeoplePage = getPeoplePage(currentPeoplePage.getNextPage());
     }
-    
+
     private PeoplePage mockPeople(String json, PeoplePage currentPeoplePage) { //TODO wywalic
-        if(currentPeoplePage == null){
+        if (currentPeoplePage == null) {
             currentPeoplePage = new PeoplePage();
         }
         try {
