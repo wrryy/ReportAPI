@@ -4,17 +4,16 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import pl.wojrydz.softwareplant.people.People;
+import pl.wojrydz.softwareplant.character.Character;
 
 import java.io.IOException;
 
-public class PeopleSerializer extends JsonSerializer<People> {
+public class CharacterSerializer extends JsonSerializer<Character> {
 
     @Override
-    public void serialize(People value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+    public void serialize(Character value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
-//        gen.writeObjectFieldStart("character"); //TODO
-        gen.writeStringField("character_id", value.getPeople_id());
+        gen.writeStringField("character_id", value.getCharacterId());
         gen.writeStringField("character_name", value.getName());
         gen.writeEndObject();
     }

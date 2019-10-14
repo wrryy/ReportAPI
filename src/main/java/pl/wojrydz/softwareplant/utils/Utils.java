@@ -16,7 +16,7 @@ public class Utils {
 
 //    public static <T extends SingleResource> void parseAndSetId(T resource){
 //        String resourceUrl = resource.getUrl();
-//        resource.setPeople_id(resourceUrl.split("/")[5]);
+//        resource.setCharacterId(resourceUrl.split("/")[5]);
 //    }
 
 //    public static <T extends SingleResource, S extends Page> Optional<T> findMatch(S page, String query_criteria) {

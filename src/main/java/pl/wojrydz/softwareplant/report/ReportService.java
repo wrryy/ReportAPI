@@ -4,16 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import pl.wojrydz.softwareplant.api.model.PutRequest;
-import pl.wojrydz.softwareplant.film.Film;
+import pl.wojrydz.softwareplant.character.Character;
+import pl.wojrydz.softwareplant.character.CharacterService;
 import pl.wojrydz.softwareplant.film.FilmService;
-import pl.wojrydz.softwareplant.film.PeopleFilm;
-import pl.wojrydz.softwareplant.people.People;
-import pl.wojrydz.softwareplant.people.PeopleService;
 import pl.wojrydz.softwareplant.planet.Planet;
 import pl.wojrydz.softwareplant.planet.PlanetService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,14 +19,14 @@ class ReportService {
     private static final String SWAPI_URL_PEOPLE = "https://swapi.co/api/people/";
 
     private PlanetService planetService;
-    private PeopleService peopleService;
+    private CharacterService characterService;
     private FilmService filmService;
     private ReportRepository reportRepository;
 
-    public ReportService(PlanetService planetService, PeopleService peopleService,
+    public ReportService(PlanetService planetService, CharacterService characterService,
             FilmService filmService, ReportRepository reportRepository) {
         this.planetService = planetService;
-        this.peopleService = peopleService;
+        this.characterService = characterService;
         this.filmService = filmService;
         this.reportRepository = reportRepository;
     }
@@ -38,15 +35,15 @@ class ReportService {
         return findAll();
     }
 
-    ResponseEntity<Report> getOne(long report_id) {
-        return getOneFromDatabase(report_id);
+    ResponseEntity<Report> getOne(long reportId) {
+        return getOneFromDatabase(reportId);
     }
 
-    ResponseEntity putReport(long report_id, PutRequest putRequest) {
+    ResponseEntity putReport(long reportId, PutRequest putRequest) {
         Planet planet = planetService.getPlanet(putRequest.getQuery_criteria_planet_name());
-        List<People> people = peopleService.getPeople(putRequest.getQuery_criteria_character_phrase());
-        Map<People, List<Film>> filmsPerPeople = filmService.getFilmsPerPeople(people);
-        Report report = createReport(planet, filmsPerPeople, putRequest, report_id);
+        List<Character> characters = characterService.getCharacters(putRequest.getQuery_criteria_character_phrase());
+        filmService.enrichCharacterWithFilms(characters);
+        Report report = createReport(reportId, planet, characters, putRequest);
         reportRepository.save(report);
         return ResponseEntity.status(201).body(report);
     }
@@ -55,25 +52,25 @@ class ReportService {
         return ResponseEntity.ok(reportRepository.findAll());
     }
 
-    private ResponseEntity<Report> getOneFromDatabase(long report_id) {
-        Optional<Report> databaseRecord = reportRepository.findById(report_id);
+    private ResponseEntity<Report> getOneFromDatabase(long reportId) {
+        Optional<Report> databaseRecord = reportRepository.findById(reportId);
         if (databaseRecord.isPresent()) {
             return ResponseEntity.ok(databaseRecord.get());
         }
         return ResponseEntity.notFound().build();
     }
 
-    private Report createReport(Planet planet, Map<People, List<Film>> filmsPerPeople, PutRequest putRequest, long report_id) {
+    private Report createReport(long reportId, Planet planet, List<Character> characters, PutRequest putRequest) {
         Report report = new Report();
-        setReportId(report, report_id);
+        setReportId(report, reportId);
         setReportPlanet(report, planet);
         setReportQueryParams(report, putRequest);
-        setReportPeopleFilm(report, filmsPerPeople);
+        setReportCharacters(report, characters);
         return report;
     }
 
-    private void setReportId(Report report, long report_id) {
-        report.setReport_id(report_id);
+    private void setReportId(Report report, long reportId) {
+        report.setReportId(reportId);
     }
 
     private void setReportPlanet(Report report, Planet planet) {
@@ -85,20 +82,8 @@ class ReportService {
         report.setQuery_criteria_character_phrase(putRequest.getQuery_criteria_character_phrase());
         report.setQuery_criteria_planet_name(putRequest.getQuery_criteria_planet_name());
     }
-
-    private void setReportPeopleFilm(Report report, Map<People, List<Film>> filmsPerPeople) {
-        List<PeopleFilm> peopleFilms = report.getCharacterFilms();
-        for (Map.Entry<People, List<Film>> each : filmsPerPeople.entrySet()) {
-            PeopleFilm peopleFilm = createPeopleFilm(each);
-            peopleFilms.add(peopleFilm);
-        }
-    }
-
-    private PeopleFilm createPeopleFilm(Map.Entry<People, List<Film>> entry) {
-        PeopleFilm peopleFilm = new PeopleFilm();
-        peopleFilm.setCharacter(entry.getKey());
-        peopleFilm.setFilms(entry.getValue());
-        return peopleFilm;
+    private void setReportCharacters(Report report, List<Character> characters) {
+        report.setCharacters(characters);
     }
 
     ResponseEntity deleteAll() {
@@ -106,8 +91,8 @@ class ReportService {
         return ResponseEntity.ok().build();
     }
 
-    ResponseEntity deleteOne(long report_id) {
-        reportRepository.deleteById(report_id);
+    ResponseEntity deleteOne(long reportId) {
+        reportRepository.deleteById(reportId);
         return ResponseEntity.ok().build();
     }
 }

@@ -4,5 +4,5 @@ public interface SingleResource { //TODO
     String getName();
 
     String getUrl();
-//    void setPeople_id(String id);
+//    void setCharacterId(String id);
 }

@@ -15,7 +15,7 @@ public class ErrorHandler {
     @ExceptionHandler(value = {Exception.class})
     protected ResponseEntity<Object> generalHandler(Exception ex, WebRequest request) {
         log.error(ex.getMessage());
-        ExceptionMessage exceptionMessage = new ExceptionMessage(ex.getMessage());
+        ExceptionMessage exceptionMessage = new ExceptionMessage(ex.getLocalizedMessage());
         return ResponseEntity.status(500).body(exceptionMessage);
     }
 

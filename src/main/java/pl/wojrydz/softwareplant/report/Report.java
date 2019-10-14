@@ -1,6 +1,6 @@
 package pl.wojrydz.softwareplant.report;
 
-import pl.wojrydz.softwareplant.film.PeopleFilm;
+import pl.wojrydz.softwareplant.character.Character;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,19 +18,20 @@ public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long report_id;
+    private long reportId;
     private String query_criteria_character_phrase;
     private String query_criteria_planet_name;
     private String planet_id;
     private String planet_name;
-    private List<PeopleFilm> characterFilms = new ArrayList<>();
+    @ManyToMany
+    private List<Character> characters = new ArrayList<>();
 
-    public long getReport_id() {
-        return report_id;
+    public long getReportId() {
+        return reportId;
     }
 
-    public void setReport_id(long report_id) {
-        this.report_id = report_id;
+    public void setReportId(long reportId) {
+        this.reportId = reportId;
     }
 
     public String getQuery_criteria_character_phrase() {
@@ -64,11 +66,11 @@ public class Report {
         this.planet_name = planet_name;
     }
 
-    public List<PeopleFilm> getCharacterFilms() {
-        return characterFilms;
+    public List<Character> getCharacters() {
+        return characters;
     }
 
-    public void setCharacterFilms(List<PeopleFilm> characterFilms) {
-        this.characterFilms = characterFilms;
+    public void setCharacters(List<Character> characters) {
+        this.characters = characters;
     }
 }
