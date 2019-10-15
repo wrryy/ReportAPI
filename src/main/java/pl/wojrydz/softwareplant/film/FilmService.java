@@ -13,7 +13,7 @@ public class FilmService {
 
     public void enrichCharacterWithFilms(List<Character> people) {
         for (Character each : people) {
-            enrich(each);
+            each.setFilms(enrich(each));
         }
     }
 
@@ -22,12 +22,12 @@ public class FilmService {
     }
 
     private Film getFilmResource(String filmUrl) {
-//        Film film = new Film();
-//        film.setUrl(filmUrl);
-//        film.setId("1");
-//        film.setName("FILM STAR WARS");
-//        return film;
-        return Utils.callForPage(filmUrl, Film.class); //TODO
+        Film film = new Film();
+        film.setUrl(filmUrl);
+        film.setId("1");
+        film.setName("FILM STAR WARS");
+        return film;
+//        return Utils.callForPage(filmUrl, Film.class); //TODO
     }
 
 }

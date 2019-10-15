@@ -5,6 +5,7 @@ import pl.wojrydz.softwareplant.character.Character;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,20 +19,29 @@ public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long reportId;
+    private long id;
+    private long report_id;
     private String query_criteria_character_phrase;
     private String query_criteria_planet_name;
     private String planet_id;
     private String planet_name;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Character> characters = new ArrayList<>();
 
-    public long getReportId() {
-        return reportId;
+    public long getId() {
+        return id;
     }
 
-    public void setReportId(long reportId) {
-        this.reportId = reportId;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getReport_id() {
+        return report_id;
+    }
+
+    public void setReport_id(long report_id) {
+        this.report_id = report_id;
     }
 
     public String getQuery_criteria_character_phrase() {

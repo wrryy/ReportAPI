@@ -41,11 +41,12 @@ class ReportService {
 
     ResponseEntity putReport(long reportId, PutRequest putRequest) {
         Planet planet = planetService.getPlanet(putRequest.getQuery_criteria_planet_name());
-        List<Character> characters = characterService.getCharacters(putRequest.getQuery_criteria_character_phrase());
+        List<Character> characters = characterService.getCharacters(putRequest.getQuery_criteria_character_phrase(), planet.getUrl());
         filmService.enrichCharacterWithFilms(characters);
         Report report = createReport(reportId, planet, characters, putRequest);
+
         reportRepository.save(report);
-        return ResponseEntity.status(201).body(report);
+        return ResponseEntity.ok(report);
     }
 
     private ResponseEntity<List<Report>> findAll() {
@@ -70,7 +71,7 @@ class ReportService {
     }
 
     private void setReportId(Report report, long reportId) {
-        report.setReportId(reportId);
+        report.setReport_id(reportId);
     }
 
     private void setReportPlanet(Report report, Planet planet) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.stereotype.Service;
 
+import pl.wojrydz.softwareplant.api.model.PutRequest;
 import pl.wojrydz.softwareplant.utils.Utils;
 
 import java.io.IOException;
@@ -22,13 +23,13 @@ public class CharacterService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
 
-    public List<Character> getCharacters(String query_criteria_planet_name) {
+    public List<Character> getCharacters(String characterPhrase, String planetUrl) {
         List<Character> characterResult = new ArrayList<>();
         CharacterPage currentCharacterPage = mockPeople(MOCK_PEOPLE1, null); //TODO wywalic
 //        CharacterPage currentCharacterPage = getFirstCharacterPage();
 
-        while (!"null".equals(currentCharacterPage.getNextPage())) {
-            List<Character> matchingRecords = findMatch(currentCharacterPage, query_criteria_planet_name);
+        while (currentCharacterPage.hasNextPage()) {
+            List<Character> matchingRecords = findMatch(currentCharacterPage, characterPhrase, planetUrl);
             characterResult.addAll(matchingRecords);
             currentCharacterPage = mockPeople(MOCK_PEOPLE2, currentCharacterPage); //TODO wywalic
 //            changeCurrentPage(currentCharacterPage);
@@ -44,9 +45,10 @@ public class CharacterService {
         return Utils.callForPage(swapiUrl, CharacterPage.class);
     }
 
-    private List<Character> findMatch(CharacterPage page, String query_criteria_character_phrase) {
+    private List<Character> findMatch(CharacterPage page, String characterPhrase, String planetUrl) {
         return page.getChildren().stream()
-                .filter(people -> people.getName().contains(query_criteria_character_phrase))
+                .filter(people -> people.getName().contains(characterPhrase)
+                        && people.getPlanetUrl().equals(planetUrl))
                 .collect(Collectors.toList());
     }
 

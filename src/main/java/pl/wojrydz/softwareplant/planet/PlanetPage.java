@@ -28,4 +28,8 @@ public class PlanetPage implements Page {
     public void setChildren(List<Planet> children) {
         this.children = children;
     }
+
+    boolean hasNextPage(){
+        return !"null".equals(this.getNextPage());
+    }
 }

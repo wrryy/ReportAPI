@@ -28,4 +28,8 @@ public class CharacterPage implements Page {
     public void setChildren(List<Character> children) {
         this.children = children;
     }
+
+    boolean hasNextPage(){
+        return !"null".equals(this.getNextPage());
+    }
 }
