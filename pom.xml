@@ -5,7 +5,7 @@
     <groupId>pl.wojrydz</groupId>
     <artifactId>softwareplant</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>SoftwarePlant Review Application</name>
 
