@@ -1,17 +1,22 @@
 package pl.wojrydz.softwareplant.report;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.wojrydz.softwareplant.api.model.PutRequest;
 import pl.wojrydz.softwareplant.character.Character;
+import pl.wojrydz.softwareplant.character.CharacterRepository;
 import pl.wojrydz.softwareplant.character.CharacterService;
+import pl.wojrydz.softwareplant.film.FilmRepository;
 import pl.wojrydz.softwareplant.film.FilmService;
 import pl.wojrydz.softwareplant.planet.Planet;
 import pl.wojrydz.softwareplant.planet.PlanetService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 class ReportService {
@@ -22,7 +27,10 @@ class ReportService {
     private CharacterService characterService;
     private FilmService filmService;
     private ReportRepository reportRepository;
-
+@Autowired
+private FilmRepository filmRepository;
+@Autowired
+private CharacterRepository characterRepository;
     public ReportService(PlanetService planetService, CharacterService characterService,
             FilmService filmService, ReportRepository reportRepository) {
         this.planetService = planetService;
@@ -38,13 +46,12 @@ class ReportService {
     ResponseEntity<Report> getOne(long reportId) {
         return getOneFromDatabase(reportId);
     }
-
-    ResponseEntity putReport(long reportId, PutRequest putRequest) {
+@Transactional
+    public ResponseEntity putReport(long reportId, PutRequest putRequest) {
         Planet planet = planetService.getPlanet(putRequest.getQuery_criteria_planet_name());
         List<Character> characters = characterService.getCharacters(putRequest.getQuery_criteria_character_phrase(), planet.getUrl());
         filmService.enrichCharacterWithFilms(characters);
         Report report = createReport(reportId, planet, characters, putRequest);
-
         reportRepository.save(report);
         return ResponseEntity.ok(report);
     }

@@ -24,6 +24,14 @@ public class Film implements SingleResource {
     @Transient
     private String url;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String getName() {
         return name;
@@ -40,13 +48,5 @@ public class Film implements SingleResource {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }
