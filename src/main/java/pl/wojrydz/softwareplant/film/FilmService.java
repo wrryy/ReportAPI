@@ -22,12 +22,7 @@ public class FilmService {
     }
 
     private Film getFilmResource(String filmUrl) {
-        Film film = new Film();
-        film.setUrl(filmUrl);
-        film.setId("1");
-        film.setName("FILM STAR WARS");
-        return film;
-//        return Utils.callForPage(filmUrl, Film.class); //TODO
+        return Utils.callForPage(filmUrl, Film.class);
     }
 
 }

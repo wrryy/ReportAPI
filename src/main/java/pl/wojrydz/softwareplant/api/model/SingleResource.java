@@ -1,8 +1,6 @@
 package pl.wojrydz.softwareplant.api.model;
 
-public interface SingleResource { //TODO
+public interface SingleResource {
     String getName();
-
     String getUrl();
-//    void setCharacterId(String id);
 }

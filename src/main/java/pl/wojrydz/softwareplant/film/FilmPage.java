@@ -2,11 +2,9 @@ package pl.wojrydz.softwareplant.film;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import pl.wojrydz.softwareplant.api.model.Page;
-
 import java.util.List;
 
-public class FilmPage implements Page {
+public class FilmPage   {
 
     @JsonProperty("next")
     private String nextPage;

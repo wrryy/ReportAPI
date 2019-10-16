@@ -2,11 +2,9 @@ package pl.wojrydz.softwareplant.character;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import pl.wojrydz.softwareplant.api.model.Page;
-
 import java.util.List;
 
-public class CharacterPage implements Page {
+public class CharacterPage   {
     @JsonProperty("next")
     private String nextPage;
     @JsonProperty("results")
@@ -20,7 +18,6 @@ public class CharacterPage implements Page {
         this.nextPage = nextPage;
     }
 
-    @Override
     public List<Character> getChildren() {
         return children;
     }

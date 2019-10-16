@@ -2,11 +2,9 @@ package pl.wojrydz.softwareplant.planet;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import pl.wojrydz.softwareplant.api.model.Page;
-
 import java.util.List;
 
-public class PlanetPage implements Page {
+public class PlanetPage   {
     @JsonProperty("next")
     private String nextPage;
     @JsonProperty("results")
@@ -20,7 +18,6 @@ public class PlanetPage implements Page {
         this.nextPage = nextPage;
     }
 
-    @Override
     public List<Planet> getChildren() {
         return children;
     }
