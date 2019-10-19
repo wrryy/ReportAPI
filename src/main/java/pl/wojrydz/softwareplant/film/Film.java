@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import pl.wojrydz.softwareplant.api.model.SingleResource;
 import pl.wojrydz.softwareplant.character.Character;
-import pl.wojrydz.softwareplant.utils.FilmSerializer;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.util.ArrayList;
 
 @Entity
 @Table(name = "films")
@@ -51,7 +49,7 @@ public class Film implements SingleResource {
     }
 
     @Override
-    public String getTitle() {
+    public String getName() {
         return title;
     }
 

@@ -1,15 +1,19 @@
 package pl.wojrydz.softwareplant.film;
 
 import org.springframework.stereotype.Service;
-
 import pl.wojrydz.softwareplant.character.Character;
-import pl.wojrydz.softwareplant.utils.Utils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
+
+    private FilmUtil filmUtil;
+
+    public FilmService(FilmUtil filmUtil) {
+        this.filmUtil = filmUtil;
+    }
 
     public void enrichCharacterWithFilms(List<Character> people) {
         for (Character each : people) {
@@ -22,7 +26,7 @@ public class FilmService {
     }
 
     private Film getFilmResource(String filmUrl) {
-        return Utils.callForPage(filmUrl, Film.class);
+        return filmUtil.callForPage(filmUrl, Film.class);
     }
 
 }

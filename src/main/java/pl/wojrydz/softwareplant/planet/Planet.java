@@ -7,7 +7,7 @@ public class Planet implements SingleResource {
     private String url;
     private String id;
 
-    public String getTitle() {
+    public String getName() {
         return name;
     }
 

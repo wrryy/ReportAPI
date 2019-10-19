@@ -64,7 +64,7 @@ public class Character implements SingleResource {
 
     @Override
     @JsonProperty("character_name")
-    public String getTitle() {
+    public String getName() {
         return name;
     }
 

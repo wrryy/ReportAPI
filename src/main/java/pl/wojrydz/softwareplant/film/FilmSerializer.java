@@ -1,4 +1,4 @@
-package pl.wojrydz.softwareplant.utils;
+package pl.wojrydz.softwareplant.film;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -14,7 +14,7 @@ public class FilmSerializer extends JsonSerializer<Film> {
     public void serialize(Film value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
         gen.writeStringField("film_id", value.getFilm_id());
-        gen.writeStringField("film_name", value.getTitle());
+        gen.writeStringField("film_name", value.getName());
         gen.writeEndObject();
     }
 }
