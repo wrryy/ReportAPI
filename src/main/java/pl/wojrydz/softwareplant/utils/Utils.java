@@ -8,8 +8,9 @@ public class Utils {
     private static RestTemplate restTemplate = new RestTemplate();
 
     public static <T> T callForPage(String swapiUrl, Class<T> clazz) {
-        ResponseEntity<T> responseEntity = restTemplate.getForEntity(swapiUrl, clazz);
-        return responseEntity.getBody();
+//        ResponseEntity<T> responseEntity = restTemplate.getForEntity(swapiUrl, clazz);
+        T responseEntity = restTemplate.getForObject(swapiUrl, clazz);
+        return responseEntity;
     }
 
 }

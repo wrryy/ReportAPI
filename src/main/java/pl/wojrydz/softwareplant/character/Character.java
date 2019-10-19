@@ -8,7 +8,6 @@ import pl.wojrydz.softwareplant.film.Film;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +29,7 @@ public class Character implements SingleResource {
     private String characterId;
     @Column(name = "character_name")
     private String name;
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany
     private List<Film> films;
 
     @Transient

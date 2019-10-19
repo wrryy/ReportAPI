@@ -1,5 +1,6 @@
 package pl.wojrydz.softwareplant.report;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,6 @@ import pl.wojrydz.softwareplant.planet.Planet;
 import pl.wojrydz.softwareplant.planet.PlanetService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 class ReportService {
@@ -34,28 +34,26 @@ class ReportService {
     }
 
     ResponseEntity<Report> getOne(long reportId) {
-        return getOneFromDatabase(reportId);
+        Report databaseRecord = reportRepository.findByReportId(reportId);
+
+        if (databaseRecord != null) {
+            return ResponseEntity.ok(databaseRecord);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     ResponseEntity putReport(long reportId, PutRequest putRequest) {
         Planet planet = planetService.getPlanet(putRequest.getQuery_criteria_planet_name());
         List<Character> characters = characterService.getCharacters(putRequest.getQuery_criteria_character_phrase(), planet.getUrl());
         filmService.enrichCharacterWithFilms(characters);
+
         Report report = createReport(reportId, planet, characters, putRequest);
-        reportRepository.save(report);
+        saveReport(report);
         return ResponseEntity.ok(report);
     }
 
     private ResponseEntity<List<Report>> findAll() {
         return ResponseEntity.ok(reportRepository.findAll());
-    }
-
-    private ResponseEntity<Report> getOneFromDatabase(long reportId) {
-        Optional<Report> databaseRecord = reportRepository.findById(reportId);
-        if (databaseRecord.isPresent()) {
-            return ResponseEntity.ok(databaseRecord.get());
-        }
-        return ResponseEntity.notFound().build();
     }
 
     private Report createReport(long reportId, Planet planet, List<Character> characters, PutRequest putRequest) {
@@ -68,7 +66,7 @@ class ReportService {
     }
 
     private void setReportId(Report report, long reportId) {
-        report.setReport_id(reportId);
+        report.setReportId(reportId);
     }
 
     private void setReportPlanet(Report report, Planet planet) {
@@ -80,8 +78,15 @@ class ReportService {
         report.setQuery_criteria_character_phrase(putRequest.getQuery_criteria_character_phrase());
         report.setQuery_criteria_planet_name(putRequest.getQuery_criteria_planet_name());
     }
+
     private void setReportCharacters(Report report, List<Character> characters) {
         report.setCharacters(characters);
+    }
+
+    private void saveReport(Report report) {
+        Report dbReport = reportRepository.findByReportId(report.getReportId());
+        BeanUtils.copyProperties(report, dbReport);
+        reportRepository.save(dbReport);
     }
 
     ResponseEntity deleteAll() {
@@ -93,4 +98,5 @@ class ReportService {
         reportRepository.deleteById(reportId);
         return ResponseEntity.ok().build();
     }
+
 }
