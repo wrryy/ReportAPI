@@ -3,7 +3,6 @@ package pl.wojrydz.softwareplant.report;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import pl.wojrydz.softwareplant.api.model.PutRequest;
 import pl.wojrydz.softwareplant.character.Character;
 import pl.wojrydz.softwareplant.character.CharacterService;
@@ -11,6 +10,7 @@ import pl.wojrydz.softwareplant.film.FilmService;
 import pl.wojrydz.softwareplant.planet.Planet;
 import pl.wojrydz.softwareplant.planet.PlanetService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -101,6 +101,7 @@ class ReportService {
         long id = dbReport.getId();
         BeanUtils.copyProperties(report, dbReport);
         dbReport.setId(id);
+        reportRepository.delete(dbReport);
         reportRepository.save(dbReport);
     }
 
@@ -109,9 +110,14 @@ class ReportService {
         return ResponseEntity.ok().build();
     }
 
+    @Transactional
     ResponseEntity deleteOne(long reportId) {
-        reportRepository.deleteById(reportId);
-        return ResponseEntity.ok().build();
+        Report dbRecord = reportRepository.findByReportId(reportId);
+        if(dbRecord != null){
+            reportRepository.delete(dbRecord);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

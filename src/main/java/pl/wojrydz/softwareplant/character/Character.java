@@ -12,9 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.List;
@@ -35,10 +33,7 @@ public class Character implements SingleResource {
     @Column(name = "character_name")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(  name = "character_film",
-                joinColumns = { @JoinColumn(name = "character_id") },
-                inverseJoinColumns = { @JoinColumn(name = "film_id") } )
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL)
     @JsonProperty("films")
     private List<Film> filmObjects;
 
@@ -84,7 +79,7 @@ public class Character implements SingleResource {
 
     public void setFilmObjects(List<Film> filmObjects) {
         for (Film each: filmObjects){
-            each.addCharacter(this);
+            each.setCharacter(this);
         }
         this.filmObjects = filmObjects;
     }

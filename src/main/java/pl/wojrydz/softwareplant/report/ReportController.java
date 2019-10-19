@@ -26,14 +26,14 @@ public class ReportController {
         return reportService.getAll();
     }
 
-    @GetMapping("/{report_id")
+    @GetMapping("/{report_id}")
     public ResponseEntity<Report> getReport(@PathVariable long report_id) {
         return reportService.getOne(report_id);
     }
 
-    @PutMapping(value = "/{report_id}", headers = "content-type=application/json")
-    public ResponseEntity putReport(@PathVariable("report_id") long report_id,
-            @RequestBody PutRequest putRequest) {
+    @PutMapping("/{report_id}")
+    public ResponseEntity putReport( @PathVariable("report_id") long report_id,
+                                     @RequestBody PutRequest putRequest) {
         return reportService.putReport(report_id, putRequest);
     }
 
@@ -42,7 +42,7 @@ public class ReportController {
         return reportService.deleteAll();
     }
 
-    @DeleteMapping("/{report_id")
+    @DeleteMapping("/{report_id}")
     public ResponseEntity deleteReport(@PathVariable long report_id) {
         return reportService.deleteOne(report_id);
     }
