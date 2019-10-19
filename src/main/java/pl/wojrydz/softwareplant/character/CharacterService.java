@@ -35,7 +35,7 @@ public class CharacterService {
 
     private List<Character> findMatch(CharacterPage page, String characterPhrase, String planetUrl) {
         return page.getChildren().stream()
-                .filter(people -> people.getName().contains(characterPhrase)
+                .filter(people -> people.getTitle().contains(characterPhrase)
                         && people.getPlanetUrl().equals(planetUrl))
                 .collect(Collectors.toList());
     }

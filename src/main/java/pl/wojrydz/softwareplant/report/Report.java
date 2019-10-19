@@ -1,7 +1,10 @@
 package pl.wojrydz.softwareplant.report;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.CascadeType;
+import org.hibernate.annotations.ManyToAny;
 import pl.wojrydz.softwareplant.character.Character;
 
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,15 +26,19 @@ public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private long id;
+
     @Column(name = "report_id")
     @JsonProperty("report_id")
     private long reportId;
+
     private String query_criteria_character_phrase;
     private String query_criteria_planet_name;
     private String planet_id;
     private String planet_name;
-    @ManyToMany
+
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id")
     private List<Character> characters = new ArrayList<>();
 

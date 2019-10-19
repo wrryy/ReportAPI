@@ -43,9 +43,19 @@ class ReportService {
     }
 
     ResponseEntity putReport(long reportId, PutRequest putRequest) {
+
+        long startTime = System. nanoTime();
         Planet planet = planetService.getPlanet(putRequest.getQuery_criteria_planet_name());
+        long estimatedTime = System.nanoTime() - startTime;
+        System.out.println("planet     : " + estimatedTime);
+        startTime = System. nanoTime();
         List<Character> characters = characterService.getCharacters(putRequest.getQuery_criteria_character_phrase(), planet.getUrl());
+        estimatedTime = System.nanoTime() - startTime;
+        System.out.println("charrssss     : " + estimatedTime);
+        startTime = System. nanoTime();
         filmService.enrichCharacterWithFilms(characters);
+        estimatedTime = System.nanoTime() - startTime;
+        System.out.println("filmsss     : " + estimatedTime);
 
         Report report = createReport(reportId, planet, characters, putRequest);
         saveReport(report);
@@ -62,7 +72,7 @@ class ReportService {
         setReportPlanet(report, planet);
         setReportQueryParams(report, putRequest);
         setReportCharacters(report, characters);
-        return report;
+            return report;
     }
 
     private void setReportId(Report report, long reportId) {
@@ -71,7 +81,7 @@ class ReportService {
 
     private void setReportPlanet(Report report, Planet planet) {
         report.setPlanet_id(planet.getId());
-        report.setPlanet_name(planet.getName());
+        report.setPlanet_name(planet.getTitle());
     }
 
     private void setReportQueryParams(Report report, PutRequest putRequest) {
@@ -85,7 +95,12 @@ class ReportService {
 
     private void saveReport(Report report) {
         Report dbReport = reportRepository.findByReportId(report.getReportId());
+        if(dbReport == null){
+            dbReport = new Report();
+        }
+        long id = dbReport.getId();
         BeanUtils.copyProperties(report, dbReport);
+        dbReport.setId(id);
         reportRepository.save(dbReport);
     }
 

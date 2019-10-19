@@ -2,40 +2,51 @@ package pl.wojrydz.softwareplant.character;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import pl.wojrydz.softwareplant.api.model.SingleResource;
 import pl.wojrydz.softwareplant.film.Film;
 
-import java.util.List;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.List;
 
 @Entity
 @Table(name = "characters")
+@JsonPropertyOrder(alphabetic = true)
 public class Character implements SingleResource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private long id;
+
     @Column(name = "character_id")
     private String characterId;
+
     @Column(name = "character_name")
     private String name;
-    @ManyToMany
-    private List<Film> films;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(  name = "character_film",
+                joinColumns = { @JoinColumn(name = "character_id") },
+                inverseJoinColumns = { @JoinColumn(name = "film_id") } )
+    @JsonProperty("films")
+    private List<Film> filmObjects;
 
     @Transient
+    @JsonIgnore
     private String planetUrl;
     @Transient
-    private List<String> filmsUrls;
+    private List<String> films;
     @Transient
     private String url;
 
@@ -58,7 +69,7 @@ public class Character implements SingleResource {
 
     @Override
     @JsonProperty("character_name")
-    public String getName() {
+    public String getTitle() {
         return name;
     }
 
@@ -67,22 +78,25 @@ public class Character implements SingleResource {
         this.name = name;
     }
 
-    @JsonProperty("films")
-    public List<Film> getFilms() {
+    public List<Film> getFilmObjects() {
+        return filmObjects;
+    }
+
+    public void setFilmObjects(List<Film> filmObjects) {
+        for (Film each: filmObjects){
+            each.addCharacter(this);
+        }
+        this.filmObjects = filmObjects;
+    }
+
+    @JsonIgnore
+    public List<String> getFilms() {
         return films;
     }
 
-    public void setFilms(List<Film> films) {
-        this.films = films;
-    }
-
-    public List<String> getFilmsUrls() {
-        return filmsUrls;
-    }
-
     @JsonProperty("films")
-    public void setFilmsUrls(List<String> filmsUrls) {
-        this.filmsUrls = filmsUrls;
+    public void setFilms(List<String> films) {
+        this.films = films;
     }
 
     @Override

@@ -27,6 +27,6 @@ public class CharacterPage   {
     }
 
     boolean hasNextPage(){
-        return !"null".equals(this.getNextPage());
+        return null != (this.getNextPage());
     }
 }

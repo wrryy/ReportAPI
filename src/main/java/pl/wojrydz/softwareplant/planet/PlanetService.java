@@ -40,7 +40,7 @@ public class PlanetService {
 
     private Optional<Planet> findMatch(PlanetPage page, String query_criteria_planet_name) {
         return page.getChildren().stream()
-                .filter(planet -> query_criteria_planet_name.equals(planet.getName()))
+                .filter(planet -> query_criteria_planet_name.equals(planet.getTitle()))
                 .findFirst();
     }
 

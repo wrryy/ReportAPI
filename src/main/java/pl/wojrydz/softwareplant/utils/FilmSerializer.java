@@ -13,8 +13,8 @@ public class FilmSerializer extends JsonSerializer<Film> {
     @Override
     public void serialize(Film value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
-        gen.writeStringField("film_id", value.getId());
-        gen.writeStringField("film_name", value.getName());
+        gen.writeStringField("film_id", value.getFilm_id());
+        gen.writeStringField("film_name", value.getTitle());
         gen.writeEndObject();
     }
 }

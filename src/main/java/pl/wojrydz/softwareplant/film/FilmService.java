@@ -13,12 +13,12 @@ public class FilmService {
 
     public void enrichCharacterWithFilms(List<Character> people) {
         for (Character each : people) {
-            each.setFilms(enrich(each));
+            each.setFilmObjects(enrich(each));
         }
     }
 
     private List<Film> enrich(Character character) {
-        return character.getFilmsUrls().stream().map(this::getFilmResource).collect(Collectors.toList());
+        return character.getFilms().stream().map(this::getFilmResource).collect(Collectors.toList());
     }
 
     private Film getFilmResource(String filmUrl) {
